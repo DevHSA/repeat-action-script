@@ -59,6 +59,9 @@ const battleOverHandler = () => {
   window.location.replace(location);
 };
 
+
+
+
 const autoBattle = () => {
   //GET CLICKABLE BUTTON
   buttonList = document.querySelectorAll('input[type="submit"]');
@@ -105,7 +108,7 @@ const autoBattle = () => {
     }
   }
   //IF IN BATTLE OVER PAGE
-  else if (h3List[0].firstChild.data.includes("Your team beat")) {
+  else if (h3List[0].firstChild.data.includes("Your team")) {
     battleOverHandler();
   }
 
