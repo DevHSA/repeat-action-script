@@ -20,23 +20,34 @@
 //*****************ignore********************//
 
 //INTEGRAL VARIABLES --- DO NOT DISTURB
-let buttonList, h3List, loadingDiv;
-let location = window.location;
+let buttonList, h3List, loadingDiv, liList;
+let location = window.location; //Starting Location whenever the page reloads
 let logoutURL = "https://www.pokemon-vortex.com/logout";
-let reloadTimeoutCount = 0;
+let battleFunctionGlobalCallCount = 0;
 //CONFIGURABLE VARIABLES --- CHANGE ACCORDING TO YOUR NEEDS
-let callInterval = 1200; // Smaller Values Lead to Loops and Bans. Bigger Values Increase time between reloads(Safe). Change according to your Internet speed and risk appetite
-let mode = "BattleMode"; // Values: "RandomBattleMode" or "TrainMode" or ""
+let battleFunctionCallInterval = 1200; // Smaller Values Lead to Loops and Bans. Bigger Values Increase time between reloads(Safe). Change according to your Internet speed and risk appetite
+
 let decoyURLS = [
   "https://www.pokemon-vortex.com/gyms/",
   "https://www.pokemon-vortex.com/special-battles/",
   "https://www.pokemon-vortex.com/team/",
+
+
 ];
+
 let battleURLS = [
   "https://www.pokemon-vortex.com/battle-user/381236",
   "https://www.pokemon-vortex.com/battle-user/1058571",
 ];
 
+
+//UTILITY FUNCTIONS
+const randomNumber = (min, max) =>{
+  return  Math.random() * (max - min) + min;
+}
+
+
+//INTEGRAL FUNCTIONS
 const selectPokemonHandler = () => {
   console.log("SELECT POKEMON PAGE");
 
@@ -55,9 +66,14 @@ const attackResultHandler = () => {
 
 const battleOverHandler = () => {
   console.log("BATTLE OVER PAGE");
+  //GET CLICKABLE BUTTON
+  liList = document.querySelectorAll('li[class="menu-tab"]');
+  liList[0].dispatchEvent(new MouseEvent("click"));
   // clearInterval(intervalHandler);
-  window.location.replace(location);
+  // window.location.replace(location);
 };
+
+
 
 
 
@@ -69,6 +85,7 @@ const autoBattle = () => {
   h3List = document.querySelectorAll("h3");
   //LOADING CHECK
   loadingDiv = document.querySelector('div[id="loading"]');
+
 
   //INCREMENT TIMEOUT COUNT --- MAX RETRIES SET at 40 Function Calls
   reloadTimeoutCount++;
@@ -109,12 +126,16 @@ const autoBattle = () => {
   }
   //IF IN BATTLE OVER PAGE
   else if (h3List[0].firstChild.data.includes("Your team")) {
-    battleOverHandler();
+    if (loadingDiv.attributes[1].nodeValue.includes("hidden")) {
+      battleOverHandler();
+    }
+  
   }
-
-  setTimeout(autoBattle, 1000);
+  
+  setTimeout(autoBattle,  randomNumber(2000,1000));
 };
 
 // let intervalHandler = setInterval(() => autoBattle(), callInterval);
 
-setTimeout(autoBattle, 1000);
+  setTimeout(autoBattle, 1000);
+
